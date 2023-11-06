@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Data</title>
+    {{!-- Explain this part!!! --}}
+    {{!-- <base href="https://fictional-garbanzo-6v9p96g74p2rq54-5004.app.github.dev/"> --}}
+    <link rel="stylesheet" href="{{link "style.css"}}">
+    <script type="module" src="{{link "script.mjs"}}"></script>
+</head>
+<body>
+    <section id="genres" style="width: 50%;">
+        <h2>Click a genre</h2>
+        {{> genresList}}
+    </section>
+    <section id="genreDetails" style="width: 50%;">
+    {{{body}}}
+    </section>
+</body>
+</html>
