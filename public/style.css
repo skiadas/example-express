@@ -31,6 +31,16 @@
     min-height: 100vh;
   }
   
+  #genreDetails {
+    opacity: 1;
+    transition: opacity 1s;
+  }
+
+
+  body.loading #genreDetails {
+    opacity: 0;
+  }
+
   .movie.hidden {
     display: none;
   }

@@ -8,11 +8,20 @@ if (document.readyState !== "loading") {
   }
 
   function myInitCode() {
+    document.body.addEventListener('click', handleLinkClicks);
     document.querySelector("#popularityCutoff")
     .addEventListener("change", (ev) => {
       popularityCutoff = Number((ev.target).value);
+      const url = new URL(window.location);
+      url.searchParams.set("popularity", popularityCutoff);
+      window.location = url;
       updateStuff();
     });
+    const url = new URL(window.location);
+    if (url.searchParams.has("popularity")) {
+      document.querySelector("#popularityCutoff").value = url.searchParams.get("popularity");
+      popularityCutoff = Number(url.searchParams.get("popularity"));
+    }
     updateStuff();
   }
 
@@ -22,11 +31,13 @@ if (document.readyState !== "loading") {
     let totalPopularity = 0;
     document.querySelectorAll(".movie").forEach((el) => {
         const elPopularity = Number(el.dataset.popularity);
-        if (elPopularity >= popularityCutoff) el.classList.remove("hidden");
+        if (elPopularity >= popularityCutoff) {
+          el.classList.remove("hidden");
+          moviesCount += 1;
+          totalPopularity += elPopularity;
+      }
         else {
             el.classList.add("hidden");
-            moviesCount += 1;
-            totalPopularity += elPopularity;
         }
     });
 
@@ -34,3 +45,18 @@ if (document.readyState !== "loading") {
     document.querySelector("#avgPopularity").textContent = `${totalPopularity / moviesCount}`;
   }
   
+function handleLinkClicks(ev) {
+  if (ev.target.matches("a")) {
+    console.log(ev.target.href);
+    fetch(ev.target.href + "?fragment")
+      .then(r => r.text())
+      .then(txt => {
+        document.body.classList.add("loading");
+        setTimeout(() => {
+          document.querySelector("#genreDetails").innerHTML = txt;
+          document.body.classList.remove("loading");
+        }, 1000);
+      });
+    ev.preventDefault();
+  }
+}

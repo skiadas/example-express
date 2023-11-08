@@ -6,6 +6,6 @@
         <label>Popularity cutoff: <input type="number" id="popularityCutoff" value="100"></label>
         <ul id="movieList">
             {{#each movies}}
-            <li class="movie" data-popularity="{{popularity}}" data-voteAverage="{{vote_average}}" data-voteCount="{{vote_count}}">{{title}}</li>
+            <li class="movie" data-popularity="{{popularity}}" data-voteAverage="{{vote_average}}" data-voteCount="{{vote_count}}" title="{{overview}}">{{title}}</li>
             {{/each}}
         </li>

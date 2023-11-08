@@ -37,13 +37,15 @@ app.get('/genre/:id', (req, res) => {
   const givenId = Number(req.params.id);
   let selectedGenre = genres.find((g) => g.id == givenId);
   if (!selectedGenre) return res.sendStatus(404);
+  const layout = "fragment" in req.query ? false : "main";
   res.render('genre', {
     genres, 
     selectedGenre,
     movies: movies.filter(m => m.genre_ids.includes(givenId)),
     helpers: {
       link: (path) => "../" + path
-    }
+    },
+    layout
   })
 });
 
