@@ -14,7 +14,8 @@ if (document.readyState !== "loading") {
       popularityCutoff = Number((ev.target).value);
       const url = new URL(window.location);
       url.searchParams.set("popularity", popularityCutoff);
-      window.location = url;
+      // window.location = url;
+      window.history.pushState({ popularity: popularityCutoff }, "", url);
       updateStuff();
     });
     const url = new URL(window.location);
@@ -47,14 +48,18 @@ if (document.readyState !== "loading") {
   
 function handleLinkClicks(ev) {
   if (ev.target.matches("a")) {
-    console.log(ev.target.href);
-    fetch(ev.target.href + "?fragment")
+    window.location = ev.target.href + `?popularity=${popularityCutoff}`;
+    ev.preventDefault();
+    return;
+      console.log(ev.target.href);
+    fetch(ev.target.href + `?fragment&popularity=${popularityCutoff}`)
       .then(r => r.text())
       .then(txt => {
         document.body.classList.add("loading");
         setTimeout(() => {
           document.querySelector("#genreDetails").innerHTML = txt;
           document.body.classList.remove("loading");
+          updateStuff();  // NOTE: Fails, because handler at wrong element
         }, 1000);
       });
     ev.preventDefault();
