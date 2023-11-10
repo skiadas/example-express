@@ -9,19 +9,31 @@ if (document.readyState !== "loading") {
 
   function myInitCode() {
     document.body.addEventListener('click', handleLinkClicks);
-    document.querySelector("#popularityCutoff")
+    document.body
     .addEventListener("change", (ev) => {
-      popularityCutoff = Number((ev.target).value);
-      const url = new URL(window.location);
-      url.searchParams.set("popularity", popularityCutoff);
-      // window.location = url;
-      window.history.pushState({ popularity: popularityCutoff }, "", url);
-      updateStuff();
+      if (ev.target.matches("#popularityCutoff")) {
+        popularityCutoff = Number((ev.target).value);
+        const url = new URL(window.location);
+        url.searchParams.set("popularity", popularityCutoff);
+        // window.location = url;
+        window.localStorage.setItem("popularity", popularityCutoff);
+        window.history.replaceState({ popularity: popularityCutoff }, "", url);
+        updateStuff();  
+      }
     });
     const url = new URL(window.location);
     if (url.searchParams.has("popularity")) {
       document.querySelector("#popularityCutoff").value = url.searchParams.get("popularity");
       popularityCutoff = Number(url.searchParams.get("popularity"));
+      window.localStorage.setItem("popularity", popularityCutoff);
+    } else {
+      console.log("getting new value");
+      const pop = window.localStorage.getItem("popularity");
+      if (pop != null) {
+        popularityCutoff = Number(pop);
+        document.querySelector("#popularityCutoff").value = pop;
+        updateStuff();
+      }
     }
     updateStuff();
   }
@@ -48,10 +60,10 @@ if (document.readyState !== "loading") {
   
 function handleLinkClicks(ev) {
   if (ev.target.matches("a")) {
-    window.location = ev.target.href + `?popularity=${popularityCutoff}`;
-    ev.preventDefault();
-    return;
-      console.log(ev.target.href);
+    // window.location = ev.target.href + `?popularity=${popularityCutoff}`;
+    // ev.preventDefault();
+    // return;
+      // console.log(ev.target.href);
     fetch(ev.target.href + `?fragment&popularity=${popularityCutoff}`)
       .then(r => r.text())
       .then(txt => {

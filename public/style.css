@@ -36,7 +36,6 @@
     transition: opacity 1s;
   }
 
-
   body.loading #genreDetails {
     opacity: 0;
   }
